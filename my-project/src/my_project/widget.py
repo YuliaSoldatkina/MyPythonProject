@@ -1,5 +1,6 @@
 # my-project/src/my_project/widget.py
 
+from datetime import datetime
 from .masks import get_mask_card_number, get_mask_account
 
 
@@ -16,3 +17,11 @@ def mask_account_card(raw_data: str) -> str:
     # Иначе считаем, что это карта
     masked = get_mask_card_number(number)
     return f"{name} {masked}"
+
+def get_date(raw_date: str) -> str:
+
+    dt = datetime.fromisoformat(raw_date)
+    return dt.strftime("%d.%m.%Y")
+
+if __name__ == "__main__":
+    print(get_date("2024-03-11T02:26:18.671407"))
