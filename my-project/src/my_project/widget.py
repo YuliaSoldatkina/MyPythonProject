@@ -22,6 +22,3 @@ def get_date(raw_date: str) -> str:
 
     dt = datetime.fromisoformat(raw_date)
     return dt.strftime("%d.%m.%Y")
-
-if __name__ == "__main__":
-    print(get_date("2024-03-11T02:26:18.671407"))
