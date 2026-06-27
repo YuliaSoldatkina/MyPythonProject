@@ -1,0 +1,40 @@
+[project]
+name = "my-project"
+version = "0.1.0"
+description = "Masking cards and accounts"
+authors = [
+    {name = "Your Name",email = "you@example.com"}
+]
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = []
+
+[tool.poetry]
+packages = [{include = "my_project", from = "src"}]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+lint = [
+    "flake8 (>=7.3.0,<8.0.0)",
+    "black (>=26.5.1,<27.0.0)",
+    "isort (>=8.0.1,<9.0.0)",
+    "mypy (>=2.1.0,<3.0.0)"
+]
+
+[tool.black]
+line-length = 119
+target-version = ["py314"]
+
+[tool.isort]
+profile = "black"
+line_length = 119
+src_paths = ["src"]
+known_first_party = ["my_project"]
+
+[tool.mypy]
+python_version = "3.14"
+mypy_path = ["src"]
+packages = ["my_project"]
