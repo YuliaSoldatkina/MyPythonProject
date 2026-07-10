@@ -76,7 +76,11 @@ def test_filter_by_currency_iterator(transactions_sample):
         ("EUR", []),
     ],
 )
-def test_filter_by_currency_parametrized(transactions_sample, currency, expected_ids):
+def test_filter_by_currency_parametrized(
+    transactions_sample,
+    currency,
+    expected_ids,
+):
     result = list(filter_by_currency(transactions_sample, currency))
     ids = [tx["id"] for tx in result]
     assert ids == expected_ids
