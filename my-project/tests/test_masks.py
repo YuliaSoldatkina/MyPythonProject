@@ -59,7 +59,8 @@ def test_get_mask_card_number_parametrized(card_number, expected):
 
 def test_get_mask_card_number_short_returns_original(short_card_number):
     """
-    Проверяем, что при слишком коротком номере карта возвращается без изменений.
+    Проверяем, что при слишком коротком
+    номере карта возвращается без изменений.
     """
     assert get_mask_card_number(short_card_number) == short_card_number
 
@@ -82,6 +83,7 @@ def test_get_mask_account_parametrized(account_number, expected):
 
 def test_get_mask_account_short_returns_original(account_number_short):
     """
-    Проверяем, что при коротком номере счета функция возвращает исходное значение.
+    Проверяем, что при коротком номере счета
+    функция возвращает исходное значение.
     """
     assert get_mask_account(account_number_short) == account_number_short

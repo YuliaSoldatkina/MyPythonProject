@@ -33,7 +33,9 @@ def test_log_error_console(capsys):
     captured = capsys.readouterr()
     # ожидаемый формат: "divide error: ZeroDivisionError. Inputs: (1, 0), {}"
     out = captured.out.strip()
-    assert out.startswith("divide error: ZeroDivisionError. Inputs: (1, 0), {}")
+    assert out.startswith(
+        "divide error: ZeroDivisionError. Inputs: (1, 0), {}"
+    )
     assert captured.err == ""
 
     def test_log_success_file(tmp_path):
@@ -65,5 +67,3 @@ def test_log_error_console(capsys):
         assert content.startswith(
             "divide error: ZeroDivisionError. Inputs: (1, 0), {}"
         )
-
-

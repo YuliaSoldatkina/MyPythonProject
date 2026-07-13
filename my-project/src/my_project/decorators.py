@@ -28,7 +28,7 @@ def log(filename: Optional[str] = None) -> Callable:
                     f"Inputs: {args}, {kwargs}"
                 )
                 _write_log(message, filename)
-                # пробрасываем ошибку дальше, чтобы поведение функции не менялось
+
                 raise
 
         return wrapper

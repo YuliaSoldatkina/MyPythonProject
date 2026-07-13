@@ -42,8 +42,10 @@ def invalid_date_string():
 @pytest.mark.parametrize(
     "raw_data, expected",
     [
-        ("Visa Platinum 7000792289606361", "Visa Platinum 7000 79** **** 6361"),
-        ("MasterCard 1234567812345678", "MasterCard 1234 56** **** 5678"),
+        ("Visa Platinum 7000792289606361",
+         "Visa Platinum 7000 79** **** 6361"),
+        ("MasterCard 1234567812345678",
+         "MasterCard 1234 56** **** 5678"),
     ],
 )
 def test_mask_account_card_for_cards(raw_data, expected):
