@@ -24,4 +24,3 @@ def test_convert_transaction_to_rub(mock_get):
 
     assert result == pytest.approx(7844.8937)
     mock_get.assert_called_once()
-

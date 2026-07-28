@@ -1,6 +1,5 @@
 import json
 import tempfile
-from pathlib import Path
 from my_project.utils import load_transactions
 
 
