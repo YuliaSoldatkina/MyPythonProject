@@ -1,3 +1,8 @@
+import logging
+
+logger = logging.getLogger(__name__)
+
+
 def get_mask_card_number(card_number: str) -> str:
     """
     Маскирует номер банковской карты.
