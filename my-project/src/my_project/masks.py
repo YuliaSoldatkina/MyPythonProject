@@ -1,3 +1,28 @@
+import logging
+from pathlib import Path
+
+# Настройка логгера
+LOG_DIR = Path(__file__).resolve().parents[3] / "logs"
+LOG_DIR.mkdir(exist_ok=True)
+LOG_FILE = LOG_DIR / "masks.log"
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
+# Обработчик файла (перезаписывается при каждом запуске)
+file_handler = logging.FileHandler(LOG_FILE, mode='w', encoding='utf-8')
+file_handler.setLevel(logging.DEBUG)
+
+# Формат: время, модуль, уровень, сообщение
+formatter = logging.Formatter(
+    '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
+file_handler.setFormatter(formatter)
+
+logger.addHandler(file_handler)
+
+
 def get_mask_card_number(card_number: str) -> str:
     """
     Маскирует номер банковской карты.
