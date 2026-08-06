@@ -24,6 +24,11 @@ lint = [
     "mypy (>=2.1.0,<3.0.0)"
 ]
 
+test = [
+    "pytest (>=9.0.0,<10.0.0)",
+    "pytest-cov (>=6.0.0,<7.0.0)"
+]
+
 [tool.black]
 line-length = 119
 target-version = ["py314"]
