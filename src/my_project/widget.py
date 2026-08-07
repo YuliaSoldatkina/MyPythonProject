@@ -1,7 +1,8 @@
 # my-project/src/my_project/widget.py
 
 from datetime import datetime
-from .masks import get_mask_card_number, get_mask_account
+
+from .masks import get_mask_account, get_mask_card_number
 
 
 def mask_account_card(raw_data: str) -> str:
@@ -17,6 +18,7 @@ def mask_account_card(raw_data: str) -> str:
     # Иначе считаем, что это карта
     masked = get_mask_card_number(number)
     return f"{name} {masked}"
+
 
 def get_date(raw_date: str) -> str:
 
