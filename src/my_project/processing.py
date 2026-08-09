@@ -1,37 +1,78 @@
-# src/my_project/processing.py
-
+import re
+from collections import Counter
 from datetime import datetime
-from typing import Any, Dict, List
+from typing import Any
+
+Operation = dict[str, Any]
 
 
-def filter_by_state(operations: List[Dict[str, Any]], state: str) -> List[Dict[str, Any]]:
+def filter_by_state(
+    operations: list[Operation],
+    state: str,
+) -> list[Operation]:
     """
-    Фильтрует список словарей по заданному статусу 'state'.
-
-    operations: список операций, каждая операция — словарь,
-                например {"state": "EXECUTED", "date": "...", ...}
-    state: статус, по которому фильтруем, например "EXECUTED" или "CANCELED".
-
-    Возвращает новый список словарей с операциями, у которых state == заданному.
+    Фильтрует операции по статусу.
     """
-    return [op for op in operations if op.get("state") == state]
+    return [operation for operation in operations if operation.get("state") == state]
 
 
-def sort_by_date(operations: List[Dict[str, Any]], reverse: bool = True) -> List[Dict[str, Any]]:
+def sort_by_date(
+    operations: list[Operation],
+    reverse: bool = True,
+) -> list[Operation]:
     """
-    Сортирует список словарей по полю 'date'.
-
-    operations: список операций, каждая операция — словарь с ключом 'date'.
-    reverse: если True, сортируем по дате в порядке убывания (новые сверху),
-             если False — по возрастанию.
-
-    Ожидает дату в ISO-формате, например '2024-03-11T02:26:18.671407'.
+    Сортирует операции по дате.
     """
 
-    def parse_date(op: Dict[str, Any]) -> datetime:
-        raw = op.get("date")
-        if not isinstance(raw, str):
+    def parse_date(operation: Operation) -> datetime:
+        raw_date = operation.get("date")
+
+        if not isinstance(raw_date, str):
             raise ValueError("Operation date must be a string")
-        return datetime.fromisoformat(raw)
 
-    return sorted(operations, key=parse_date, reverse=reverse)
+        return datetime.fromisoformat(raw_date)
+
+    return sorted(
+        operations,
+        key=parse_date,
+        reverse=reverse,
+    )
+
+
+def process_bank_search(
+    data: list[Operation],
+    search: str,
+) -> list[Operation]:
+    """
+    Ищет операции по описанию с помощью регулярного выражения.
+    """
+    pattern = re.compile(search, re.IGNORECASE)
+
+    return [
+        operation
+        for operation in data
+        if pattern.search(
+            str(operation.get("description", "")),
+        )
+    ]
+
+
+def process_bank_operations(
+    data: list[Operation],
+    categories: list[str],
+) -> dict[str, int]:
+    """
+    Подсчитывает количество операций по категориям
+    с использованием Counter.
+    """
+    descriptions = [str(operation.get("description", "")).casefold() for operation in data]
+
+    description_counter = Counter(descriptions)
+
+    return {
+        category: description_counter.get(
+            category.casefold(),
+            0,
+        )
+        for category in categories
+    }
