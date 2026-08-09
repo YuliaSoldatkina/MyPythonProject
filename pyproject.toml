@@ -3,14 +3,19 @@ name = "my-project"
 version = "0.1.0"
 description = "Masking cards and accounts"
 authors = [
-    {name = "Your Name",email = "you@example.com"}
+    { name = "Your Name", email = "you@example.com" }
 ]
 readme = "README.md"
 requires-python = ">=3.14"
-dependencies = ["pandas (>=3.0.5,<4.0.0)", "openpyxl (>=3.1.5,<4.0.0)"]
+dependencies = [
+    "pandas (>=3.0.5,<4.0.0)",
+    "openpyxl (>=3.1.5,<4.0.0)"
+]
 
 [tool.poetry]
-packages = [{include = "my_project", from = "src"}]
+packages = [
+    { include = "my_project", from = "src" }
+]
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
@@ -26,8 +31,13 @@ lint = [
 
 test = [
     "pytest (>=9.0.0,<10.0.0)",
-    "pytest-cov (>=6.0.0,<7.0.0)"
+    "pytest-cov (>=6.0.0,<7.0.0)",
+    "pandas-stubs"
 ]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
 
 [tool.black]
 line-length = 119
@@ -43,3 +53,4 @@ known_first_party = ["my_project"]
 python_version = "3.14"
 mypy_path = ["src"]
 packages = ["my_project"]
+explicit_package_bases = true

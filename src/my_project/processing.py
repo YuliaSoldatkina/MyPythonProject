@@ -47,14 +47,18 @@ def process_bank_search(
     Ищет операции по описанию с помощью регулярного выражения.
     """
     pattern = re.compile(search, re.IGNORECASE)
+    result: list[Operation] = []
 
-    return [
-        operation
-        for operation in data
-        if pattern.search(
-            str(operation.get("description", "")),
-        )
-    ]
+    for operation in data:
+        description = operation.get("description")
+
+        if description is None:
+            description = ""
+
+        if pattern.search(str(description)):
+            result.append(operation)
+
+    return result
 
 
 def process_bank_operations(
@@ -65,7 +69,15 @@ def process_bank_operations(
     Подсчитывает количество операций по категориям
     с использованием Counter.
     """
-    descriptions = [str(operation.get("description", "")).casefold() for operation in data]
+    descriptions: list[str] = []
+
+    for operation in data:
+        description = operation.get("description")
+
+        if description is None:
+            description = ""
+
+        descriptions.append(str(description).casefold())
 
     description_counter = Counter(descriptions)
 

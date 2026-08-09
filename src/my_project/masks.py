@@ -1,7 +1,7 @@
-﻿import logging
+import logging
 from pathlib import Path
 
-# РќР°СЃС‚СЂРѕР№РєР° Р»РѕРіРіРµСЂР°
+# Настройка логгера
 LOG_DIR = Path(__file__).resolve().parents[2] / "logs"
 LOG_DIR.mkdir(exist_ok=True)
 LOG_FILE = LOG_DIR / "masks.log"
@@ -9,11 +9,11 @@ LOG_FILE = LOG_DIR / "masks.log"
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-# РћР±СЂР°Р±РѕС‚С‡РёРє С„Р°Р№Р»Р° (РїРµСЂРµР·Р°РїРёСЃС‹РІР°РµС‚СЃСЏ РїСЂРё РєР°Р¶РґРѕРј Р·Р°РїСѓСЃРєРµ)
+# Обработчик файла (перезаписывается при каждом запуске)
 file_handler = logging.FileHandler(LOG_FILE, mode="w", encoding="utf-8")
 file_handler.setLevel(logging.DEBUG)
 
-# Р¤РѕСЂРјР°С‚: РІСЂРµРјСЏ, РјРѕРґСѓР»СЊ, СѓСЂРѕРІРµРЅСЊ, СЃРѕРѕР±С‰РµРЅРёРµ
+# Формат: время, модуль, уровень, сообщение
 formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 file_handler.setFormatter(formatter)
 
@@ -22,36 +22,36 @@ logger.addHandler(file_handler)
 
 def get_mask_card_number(card_number: str) -> str:
     """
-    РњР°СЃРєРёСЂСѓРµС‚ РЅРѕРјРµСЂ Р±Р°РЅРєРѕРІСЃРєРѕР№ РєР°СЂС‚С‹.
+    Маскирует номер банковской карты.
 
-    Р¤РѕСЂРјР°С‚:
+    Формат:
         XXXX XX** **** XXXX
 
-    РџСЂРёРјРµСЂ:
+    Пример:
         '7000792289606361' -> '7000 79** **** 6361'
     """
     digits_only = card_number.replace(" ", "")
-    # РћР¶РёРґР°РµРј, С‡С‚Рѕ РґР»РёРЅР° РєР°СЂС‚С‹ >= 10, РёРЅР°С‡Рµ РїСЂРѕСЃС‚Рѕ РІРµСЂРЅРµРј РєР°Рє РµСЃС‚СЊ
+    # Ожидаем, что длина карты >= 10, иначе просто вернем как есть
     if len(digits_only) < 10:
         return card_number
 
-    # РџРµСЂРІС‹Рµ 6 Рё РїРѕСЃР»РµРґРЅРёРµ 4 С†РёС„СЂС‹
+    # Первые 6 и последние 4 цифры
     first_4 = digits_only[:4]  # XXXX
     next_2 = digits_only[4:6]  # XX
     last_4 = digits_only[-4:]  # XXXX
 
-    # Р¤РѕСЂРјР°С‚ СЃС‚СЂРѕРіРѕ РїРѕ Р·Р°РґР°РЅРёСЋ: XXXX XX** **** XXXX
+    # Формат строго по заданию: XXXX XX** **** XXXX
     return f"{first_4} {next_2}** **** {last_4}"
 
 
 def get_mask_account(account_number: str) -> str:
     """
-    РњР°СЃРєРёСЂСѓРµС‚ РЅРѕРјРµСЂ Р±Р°РЅРєРѕРІСЃРєРѕРіРѕ СЃС‡РµС‚Р°.
+    Маскирует номер банковского счета.
 
-    Р¤РѕСЂРјР°С‚:
+    Формат:
         **XXXX
 
-    РџСЂРёРјРµСЂ:
+    Пример:
         '73654108430135874305' -> '**4305'
     """
     digits_only = account_number.replace(" ", "")

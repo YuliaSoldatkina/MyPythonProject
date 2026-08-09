@@ -1,11 +1,11 @@
-﻿"""РЈС‚РёР»РёС‚С‹ РґР»СЏ РѕР±СЂР°Р±РѕС‚РєРё С‚СЂР°РЅР·Р°РєС†РёР№."""
+"""Утилиты для обработки транзакций."""
 
 import json
 import logging
 from pathlib import Path
 from typing import Any, Dict, List
 
-# РќР°СЃС‚СЂРѕР№РєР° Р»РѕРіРіРµСЂР°
+# Настройка логгера
 LOG_DIR = Path(__file__).resolve().parents[2] / "logs"
 LOG_DIR.mkdir(exist_ok=True)
 LOG_FILE = LOG_DIR / "utils.log"
@@ -13,11 +13,11 @@ LOG_FILE = LOG_DIR / "utils.log"
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-# РћР±СЂР°Р±РѕС‚С‡РёРє С„Р°Р№Р»Р° (РїРµСЂРµР·Р°РїРёСЃС‹РІР°РµС‚СЃСЏ РїСЂРё РєР°Р¶РґРѕРј Р·Р°РїСѓСЃРєРµ)
+# Обработчик файла (перезаписывается при каждом запуске)
 file_handler = logging.FileHandler(LOG_FILE, mode="w", encoding="utf-8")
 file_handler.setLevel(logging.DEBUG)
 
-# Р¤РѕСЂРјР°С‚: РІСЂРµРјСЏ, РјРѕРґСѓР»СЊ, СѓСЂРѕРІРµРЅСЊ, СЃРѕРѕР±С‰РµРЅРёРµ
+# Формат: время, модуль, уровень, сообщение
 formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 file_handler.setFormatter(formatter)
 
@@ -26,28 +26,28 @@ logger.addHandler(file_handler)
 
 def load_transactions(filepath: str) -> List[Dict[str, Any]]:
     """
-    Р—Р°РіСЂСѓР¶Р°РµС‚ СЃРїРёСЃРѕРє С„РёРЅР°РЅСЃРѕРІС‹С… С‚СЂР°РЅР·Р°РєС†РёР№ РёР· JSON-С„Р°Р№Р»Р°.
+    Загружает список финансовых транзакций из JSON-файла.
 
-    Р•СЃР»Рё С„Р°Р№Р» РЅРµ РЅР°Р№РґРµРЅ, РїСѓСЃС‚РѕР№, РёР»Рё РІ РЅС‘Рј РЅРµ СЃРїРёСЃРѕРє,
-    РІРѕР·РІСЂР°С‰Р°РµС‚ РїСѓСЃС‚РѕР№ СЃРїРёСЃРѕРє.
+    Если файл не найден, пустой, или в нём не список,
+    возвращает пустой список.
     """
-    logger.info("Р—Р°РіСЂСѓР·РєР° С‚СЂР°РЅР·Р°РєС†РёР№ РёР· %s", filepath)
+    logger.info("Загрузка транзакций из %s", filepath)
     path = Path(filepath)
 
     if not path.exists():
-        logger.warning("Р¤Р°Р№Р» РЅРµ РЅР°Р№РґРµРЅ: %s", filepath)
+        logger.warning("Файл не найден: %s", filepath)
         return []
 
     try:
         with path.open("r", encoding="utf-8") as f:
             data = json.load(f)
     except (json.JSONDecodeError, OSError) as e:
-        logger.error("РћС€РёР±РєР° РїСЂРё С‡С‚РµРЅРёРё С„Р°Р№Р»Р°: %s", e)
+        logger.error("Ошибка при чтении файла: %s", e)
         return []
 
     if not isinstance(data, list):
-        logger.warning("Р¤Р°Р№Р» СЃРѕРґРµСЂР¶РёС‚ РЅРµ СЃРїРёСЃРѕРє")
+        logger.warning("Файл содержит не список")
         return []
 
-    logger.info("Р—Р°РіСЂСѓР¶РµРЅРѕ %d С‚СЂР°РЅР·Р°РєС†РёР№", len(data))
+    logger.info("Загружено %d транзакций", len(data))
     return data
