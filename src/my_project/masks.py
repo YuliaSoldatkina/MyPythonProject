@@ -1,3 +1,25 @@
+import logging
+from pathlib import Path
+
+# Настройка логгера
+LOG_DIR = Path(__file__).resolve().parents[2] / "logs"
+LOG_DIR.mkdir(exist_ok=True)
+LOG_FILE = LOG_DIR / "masks.log"
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
+# Обработчик файла (перезаписывается при каждом запуске)
+file_handler = logging.FileHandler(LOG_FILE, mode="w", encoding="utf-8")
+file_handler.setLevel(logging.DEBUG)
+
+# Формат: время, модуль, уровень, сообщение
+formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
+file_handler.setFormatter(formatter)
+
+logger.addHandler(file_handler)
+
+
 def get_mask_card_number(card_number: str) -> str:
     """
     Маскирует номер банковской карты.
@@ -14,9 +36,9 @@ def get_mask_card_number(card_number: str) -> str:
         return card_number
 
     # Первые 6 и последние 4 цифры
-    first_4 = digits_only[:4]          # XXXX
-    next_2 = digits_only[4:6]          # XX
-    last_4 = digits_only[-4:]          # XXXX
+    first_4 = digits_only[:4]  # XXXX
+    next_2 = digits_only[4:6]  # XX
+    last_4 = digits_only[-4:]  # XXXX
 
     # Формат строго по заданию: XXXX XX** **** XXXX
     return f"{first_4} {next_2}** **** {last_4}"
